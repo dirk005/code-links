@@ -1,9 +1,0 @@
-[
-	{
-		"name": "PyPI",
-		"type": ["All","Python"],
-		"description": "The Python Package Index (PyPI) is a repository of software for the Python programming language.,",
-		"link": "https://pypi.org/",
-		"imageLink" : "https://pypi.org/static/images/logo-small.6eef541e.svg"
-	},
-]
