@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import CardList from "../components/card-list";
 
 class App extends Component {
   constructor() {
@@ -12,28 +13,25 @@ class App extends Component {
     this.getLinks();
   }
 
+  //Get links from json file om github
   getLinks = () => {
     fetch("https://dirk005.github.io/Projects-json/json/links.json")
       .then((resp) => resp.json())
-      .then((links) => this.setState({ links: links }))
+      .then((links) => this.setState({ links }))
       .catch((err) => console.log(err));
   };
 
   render() {
+    const { links } = this.state; //Deconstruct state
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1>Usefull Code links</h1>
-          {this.state.links.map((link) => (
-            <div>
-              <img alt={link.imageLink} src={link.imageLink} />
-              <h2>{link.name}</h2>
-              <p>{link.description}</p>
-              <a href={link.link} target="_blank" rel="noreferrer">
-                {link.link}
-              </a>
-            </div>
-          ))}
+      <div className="app">
+        <header className="app-header">
+          <h1 className="heading-primary">Useful Code Links</h1>
+          {
+            // Check array if any links in list  -> Print list of links
+            links.length !== 0 ? <CardList links={links} /> : null
+          }
         </header>
       </div>
     );
