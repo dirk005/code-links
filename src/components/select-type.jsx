@@ -1,5 +1,6 @@
 import React from "react";
 
+//Print type to display buttons
 const SelectType = ({ selectType }) => {
   return (
     <div className="selectType">

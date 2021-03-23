@@ -23,6 +23,7 @@ class App extends Component {
       .catch((err) => console.log(err));
   };
 
+  // Change the state when button is clicked to display links
   selectType = (type) => {
     console.log(type);
     switch (type) {
@@ -84,6 +85,8 @@ class App extends Component {
 
   render() {
     const { links } = this.state; //Deconstruct state
+
+    // Filter sites by button clicked
     const filterLinks = links.filter((link) => {
       return link.type.includes(this.state.viewType);
     });
