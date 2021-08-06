@@ -1,108 +1,168 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import CardList from "../components/card-list";
 import SelectType from "../components/select-type";
+import clsx from "clsx";
+import {
+  Typography,
+  Drawer,
+  CssBaseline,
+  AppBar,
+  Toolbar,
+  Divider,
+  IconButton,
+} from "@material-ui/core";
+import { useTheme, makeStyles } from "@material-ui/core/styles";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      links: [],
-      viewType: "All",
-    };
-  }
+const drawerWidth = 240;
 
-  componentDidMount() {
-    this.getLinks();
-  }
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
+  appBar: {
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  hide: {
+    display: "none",
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end",
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
+}));
 
-  //Get links from json file om github
-  getLinks = () => {
+const App = () => {
+  const classes = useStyles();
+  const theme = useTheme();
+
+  const [links, setLinks] = useState([]);
+  const [viewType, setViewType] = useState("All");
+
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    //Get links from json file om github
     fetch("https://dirk005.github.io/Projects-json/json/links.json")
       .then((resp) => resp.json())
-      .then((links) => this.setState({ links }))
+      .then((links) => setLinks(links))
       .catch((err) => console.log(err));
-  };
+  }, []);
 
-  // Change the state when button is clicked to display links
-  selectType = (type) => {
-    console.log(type);
-    switch (type) {
-      case "All":
-        this.setState({ viewType: "All" });
-        break;
-      case "Python":
-        this.setState({ viewType: "Python" });
-        break;
-      case "Nodejs":
-        this.setState({ viewType: "Nodejs" });
-        break;
-      case "javascript":
-        this.setState({ viewType: "javascript" });
-        break;
-      case "CSS":
-        this.setState({ viewType: "CSS" });
-        break;
-      case "database":
-        this.setState({ viewType: "database" });
-        break;
-      case "mongodb":
-        this.setState({ viewType: "mongodb" });
-        break;
-      case "HTML":
-        this.setState({ viewType: "HTML" });
-        break;
-      case "ml":
-        this.setState({ viewType: "ml" });
-        break;
-      case "API":
-        this.setState({ viewType: "API" });
-        break;
-      case "HTTP":
-        this.setState({ viewType: "HTTP" });
-        break;
-      case "React":
-        this.setState({ viewType: "React" });
-        break;
-      case "git":
-        this.setState({ viewType: "git" });
-        break;
-      case "sql":
-        this.setState({ viewType: "sql" });
-        break;
-      case "Redux":
-        this.setState({ viewType: "Redux" });
-        break;
-      case "Hacking":
-        this.setState({ viewType: "Hacking" });
-        break;
-      case "styleguide":
-        this.setState({ viewType: "styleguide" });
-        break;
-      default:
-        this.setState({ viewType: "All" });
-    }
-  };
+  // Filter sites by button clicked
+  const filterLinks = links.filter((link) => {
+    return link.type.includes(viewType);
+  });
 
-  render() {
-    const { links } = this.state; //Deconstruct state
-
-    // Filter sites by button clicked
-    const filterLinks = links.filter((link) => {
-      return link.type.includes(this.state.viewType);
-    });
-    return (
-      <div className="app">
-        <header className="app-header">
-          <h1 className="heading-primary">Useful Code Links</h1>
-          <SelectType selectType={this.selectType} />
-          {
-            // Check array if any links in list  -> Print list of links
-            filterLinks.length !== 0 ? <CardList links={filterLinks} /> : null
-          }
-        </header>
-      </div>
-    );
-  }
-}
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+        })}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, open && classes.hide)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            Useful Code Links
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </div>
+        <Divider />
+        <SelectType setViewType={setViewType} />
+      </Drawer>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open,
+        })}
+      >
+        <div className={classes.drawerHeader} />
+        {
+          // Check array if any links in list  -> Print list of links
+          filterLinks.length !== 0 ? <CardList links={filterLinks} /> : null
+        }
+      </main>
+    </div>
+  );
+};
 
 export default App;

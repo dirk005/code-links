@@ -1,128 +1,73 @@
-import React from "react";
+import React, { useState } from "react";
+import { makeStyles, List, ListItem, ListItemText } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.paper,
+    height: "100vh",
+    overflowY: "scroll",
+    scrollbarColor: `${theme.palette.common.red} transparent`,
+    scrollbarWidth: "thin",
+    "&::-webkit-scrollbar-track": {
+      width: "0.2rem",
+      "-webkit-box-shadow": "inset 0 0 6px rgba(0, 0, 0, 0.1)",
+      boxShadow: "inset 0 0 6px rgba(0, 0, 0, 0.1)",
+      backgroundColor: theme.palette.common.red,
+    },
+
+    "&::-webkit-scrollbar": {
+      width: "0.2rem",
+      backgroundColor: theme.palette.common.red,
+    },
+    "&::-webkit-scrollbar-thumb": {
+      width: "0.2rem",
+      backgroundColor: theme.palette.common.red,
+    },
+  },
+}));
 
 //Print type to display buttons
-const SelectType = ({ selectType }) => {
+const SelectType = ({ setViewType }) => {
+  const classes = useStyles();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const linkList = [
+    { name: "All", description: "All" },
+    { name: "Nodejs", description: "Node.js" },
+    { name: "React", description: "React.js" },
+    { name: "Redux", description: "Redux" },
+    { name: "git", description: "GIT" },
+    { name: "javascript", description: "Java Script" },
+    { name: "HTML", description: "HTML" },
+    { name: "CSS", description: "CSS" },
+    { name: "styleguide", description: "Style guides" },
+    { name: "database", description: "Database" },
+    { name: "sql", description: "SQL" },
+    { name: "mongodb", description: "Mongodb" },
+    { name: "Python", description: "Python" },
+    { name: "ml", description: "Machine Learning" },
+    { name: "API", description: "API" },
+    { name: "HTTP", description: "HTTP" },
+    { name: "Hacking", description: "Hacking" },
+  ];
+
   return (
-    <div className="selectType">
-      <button
-        className="selectType_item"
-        name="All"
-        onClick={() => selectType("All")}
-      >
-        All
-      </button>
-      <button
-        className="selectType_item"
-        name="Python"
-        onClick={() => selectType("Python")}
-      >
-        Python
-      </button>
-      <button
-        className="selectType_item"
-        name="Nodejs"
-        onClick={() => selectType("Nodejs")}
-      >
-        Nodejs
-      </button>
-      <button
-        className="selectType_item"
-        name="javascript"
-        onClick={() => selectType("javascript")}
-      >
-        Java Script
-      </button>
-      <button
-        className="selectType_item"
-        name="HTML"
-        onClick={() => selectType("HTML")}
-      >
-        HTML
-      </button>
-      <button
-        className="selectType_item"
-        name="CSS"
-        onClick={() => selectType("CSS")}
-      >
-        CSS
-      </button>
-      <button
-        className="selectType_item"
-        name="Database"
-        onClick={() => selectType("database")}
-      >
-        Database
-      </button>
-      <button
-        className="selectType_item"
-        name="ml"
-        onClick={() => selectType("ml")}
-      >
-        Machine Learning
-      </button>
-      <button
-        className="selectType_item"
-        name="mongodb"
-        onClick={() => selectType("mongodb")}
-      >
-        Mongodb
-      </button>
-      <button
-        className="selectType_item"
-        name="API"
-        onClick={() => selectType("API")}
-      >
-        API
-      </button>
-      <button
-        className="selectType_item"
-        name="HTTP"
-        onClick={() => selectType("HTTP")}
-      >
-        HTTP
-      </button>
-      <button
-        className="selectType_item"
-        name="React"
-        onClick={() => selectType("React")}
-      >
-        React
-      </button>
-      <button
-        className="selectType_item"
-        name="git"
-        onClick={() => selectType("git")}
-      >
-        GITHub
-      </button>
-      <button
-        className="selectType_item"
-        name="sql"
-        onClick={() => selectType("sql")}
-      >
-        SQL
-      </button>
-      <button
-        className="selectType_item"
-        name="Redux"
-        onClick={() => selectType("Redux")}
-      >
-        Redux
-      </button>
-      <button
-        className="selectType_item"
-        name="Hacking"
-        onClick={() => selectType("Hacking")}
-      >
-        Hacking
-      </button>
-      <button
-        className="selectType_item"
-        name="styleguide"
-        onClick={() => selectType("styleguide")}
-      >
-        Style Guide
-      </button>
+    <div className={classes.root}>
+      <List>
+        {linkList.map((text, index) => (
+          <ListItem
+            button
+            key={text.name}
+            selected={index === selectedIndex}
+            onClick={() => {
+              setViewType(text.name);
+              setSelectedIndex(index);
+            }}
+          >
+            <ListItemText primary={text.description} />
+          </ListItem>
+        ))}
+      </List>
     </div>
   );
 };

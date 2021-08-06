@@ -1,15 +1,19 @@
 import React from "react";
-import Card from "./card";
+import CardItem from "./card";
+import { Grid } from "@material-ui/core";
 
-const CardList = ({ links }) => (
-  <div className="cardList">
-    {
-      // Map over links to display one at a time
-      links.map((link, key) => (
-        <Card link={link} key={key} />
-      ))
-    }
-  </div>
-);
-
+const CardList = ({ links }) => {
+  return (
+    <Grid item container justifyContent="center">
+      {
+        // Map over links to display one at a time
+        links.map((link, key) => (
+          <Grid item>
+            <CardItem link={link} key={key} />
+          </Grid>
+        ))
+      }
+    </Grid>
+  );
+};
 export default CardList;
