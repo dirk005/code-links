@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       width: "25em",
     },
+    [theme.breakpoints.down("sm")]: {
+      width: "20em",
+    },
   },
   avatar: {
     backgroundColor: "transparent",
